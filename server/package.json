@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@abandonware/noble": "^1.9.2-15",
-    "@abandonware/bluetooth-hci-socket": "^0.5.3-8"
+    "@abandonware/bluetooth-hci-socket": "^0.5.3-8",
+    "@abandonware/bleno": "0.5.1-4"
   }
 }

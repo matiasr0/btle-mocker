@@ -1,19 +1,33 @@
-const noble = require('@abandonware/noble');
+var bleno = require('@abandonware/bleno');
 
-noble.on('stateChange', async (state) => {
+import SystemInformationService from './SystemInformation/systeminformationservice'
+
+console.log(SystemInformationService)
+const systemInformationService = new SystemInformationService();
+
+bleno.on('stateChange', function(state) {
+    console.log('on -> stateChange: ' + state);
+
     if (state === 'poweredOn') {
-        await noble.startScanningAsync(['180f'], false);
+
+        bleno.startAdvertising(bleno.name, [systemInformationService.uuid]);
+    }
+    else {
+
+        bleno.stopAdvertising();
     }
 });
 
-noble.on('discover', async (peripheral) => {
-    await noble.stopScanningAsync();
-    await peripheral.connectAsync();
-    const {characteristics} = await peripheral.discoverSomeServicesAndCharacteristicsAsync(['180f'], ['2a19']);
-    const batteryLevel = (await characteristics[0].readAsync())[0];
+bleno.on('advertisingStart', function(error) {
 
-    console.log(`${peripheral.address} (${peripheral.advertisement.localName}): ${batteryLevel}%`);
+    console.log('on -> advertisingStart: ' +
+        (error ? 'error ' + error : 'success')
+    );
 
-    await peripheral.disconnectAsync();
-    process.exit(0);
+    if (!error) {
+
+        bleno.setServices([
+            systemInformationService
+        ]);
+    }
 });

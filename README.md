@@ -2,7 +2,7 @@
 
 Install apt dependencies:
 ```
-sudo apt install nodejs npm
+sudo apt install nodejs npm bluetooth bluez libbluetooth-dev libudev-dev
 ```
 
 Bleno requires bluetooth to get stopped:
